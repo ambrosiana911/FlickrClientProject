@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Flickr Client</string>
+    <string name="insert_search_string_hint">Inserisci la stringa di ricerca</string>
+    <string name="button_send">Invia!</string>
+</resources>
