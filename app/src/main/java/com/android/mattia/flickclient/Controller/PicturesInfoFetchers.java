@@ -45,11 +45,11 @@ public class PicturesInfoFetchers extends IntentService {
         mvc.model.storePictureInfos(iterable);
     }
 
-    private final static String API_KEY = "388f5641e6dc1ecac49678a156f375df";
+    private final static String API_KEY = "9f0a7d09d0e1ff62598c289b9d629f28";
 
     @WorkerThread
     private Iterable<Model.PictureInfo> fetchPictureInfos(String searchString) {
-        String query = String.format("https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=%s&text=%s&extras=url_z,description,tags&per_page=50",
+        String query = String.format("https://api.flickr.com/services/rest?method=flickr.photos.search&api_key=%s&text=%s&extras=url_s,url_z,description,tags&per_page=50",
                 API_KEY,
                 searchString);
 
@@ -91,9 +91,11 @@ public class PicturesInfoFetchers extends IntentService {
                 Log.d(TAG, "nextPhoto = " + nextPhoto);
                 int titlePos = xml.indexOf("title=", nextPhoto) + 7;
                 int url_zPos = xml.indexOf("url_z=", nextPhoto) + 7;
+                int url_sPos = xml.indexOf("url_s=", nextPhoto) + 7;
                 String title = xml.substring(titlePos, xml.indexOf("\"", titlePos + 1));
                 String url_z = xml.substring(url_zPos, xml.indexOf("\"", url_zPos + 1));
-                infos.add(new Model.PictureInfo(title, url_z));
+                String url_s = xml.substring(url_sPos, xml.indexOf("\"", url_sPos + 1));
+                infos.add(new Model.PictureInfo(title, url_z, url_s));
             }
         }
         while (nextPhoto != -1);

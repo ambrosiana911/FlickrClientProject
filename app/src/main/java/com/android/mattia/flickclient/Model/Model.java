@@ -22,10 +22,12 @@ public class Model {
     public static class PictureInfo {
         public final String title;
         public final String url;
+        public final String url_s;
 
-        public PictureInfo(String title, String url) {
+        public PictureInfo(String title, String url, String url_s) {
             this.title = title;
             this.url = url;
+            this.url_s = url_s;
         }
 
         @Override
