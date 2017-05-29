@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by mattia on 17/05/17.
@@ -61,7 +62,13 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
 
             Model.PictureInfo pictureInfo = pictureInfos[position];
             ((TextView) row.findViewById(R.id.picture_infos)).setText(pictureInfo.toString());
-            ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(pictureInfo.bitmap_image);
+            try {
+                ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(pictureInfo.bitmap_image.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
 
             return row;
         }

@@ -4,8 +4,6 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
@@ -23,7 +21,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletionService;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,9 +36,9 @@ public class PicturesInfoFetchers extends IntentService {
         super("pictures info fetchers");
     }
 
-    static void fetcher(Context context, String stringSearch){
-        Intent intent = new Intent(context , PicturesInfoFetchers.class);
-        intent.putExtra("STRING_SEARCH" , stringSearch);
+    static void fetcher(Context context, String stringSearch) {
+        Intent intent = new Intent(context, PicturesInfoFetchers.class);
+        intent.putExtra("STRING_SEARCH", stringSearch);
         context.startService(intent);
     }
 
@@ -76,28 +73,21 @@ public class PicturesInfoFetchers extends IntentService {
                     answer += line + "\n";
                     Log.d(TAG, line);
                 }
-            }
-            finally {
+            } finally {
                 if (in != null)
                     in.close();
             }
 
             return parse(answer);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return Collections.emptyList();
         }
     }
+
     private Iterable<Model.PictureInfo> parse(String xml) {
         List<Model.PictureInfo> infos = new LinkedList<>();
-//      Executor e = new Executor() {
-//            @Override
-//            public void execute(@NonNull Runnable command) {
-//                new Thread(command).start();
-//            }
-//        };
-//      ExecutorService image_downloaders = Executors.newFixedThreadPool(5);
-//        CompletionService<Bitmap> complService = new ExecutorCompletionService<>(e);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        CompletionService<Bitmap> complService = new ExecutorCompletionService<>(executor);
 
         int nextPhoto = -1;
         do {
@@ -111,29 +101,11 @@ public class PicturesInfoFetchers extends IntentService {
                 String url_z = xml.substring(url_zPos, xml.indexOf("\"", url_zPos + 1));
                 String url_s = xml.substring(url_sPos, xml.indexOf("\"", url_sPos + 1));
 
-//                complService.submit(() -> download_image(url_s));
-//              image_downloaders.execute(() -> download_image(url_s));
-
-                infos.add(new Model.PictureInfo(title, url_z, download_image(url_s)));
+                infos.add(new Model.PictureInfo(title, url_z, complService.submit(() -> new DownloadImage(url_s).getBitmapImage())));
             }
         }
         while (nextPhoto != -1);
 
         return infos;
     }
-
-    private Bitmap download_image(String url_s) {
-        Bitmap bitmap_image = null;
-        // Download Image from URL
-        try {
-            URL url = new URL(url_s);
-            URLConnection conn = url.openConnection();
-            bitmap_image = BitmapFactory.decodeStream(conn.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bitmap_image;
-    }
-
 }

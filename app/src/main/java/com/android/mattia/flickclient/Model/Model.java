@@ -24,10 +24,10 @@ public class Model {
     public static class PictureInfo {
         public final String title;
         public final String url;
-        public final Bitmap bitmap_image;
-        //public Future<Bitmap> bitmap_image;
+        //public final Bitmap bitmap_image;
+        public Future<Bitmap> bitmap_image;
 
-        public PictureInfo(String title, String url, Bitmap bitmap_image) {
+        public PictureInfo(String title, String url, Future<Bitmap> bitmap_image) {
             this.title = title;
             this.url = url;
             this.bitmap_image = bitmap_image;
