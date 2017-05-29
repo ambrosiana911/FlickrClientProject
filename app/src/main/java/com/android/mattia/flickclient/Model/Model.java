@@ -1,5 +1,7 @@
 package com.android.mattia.flickclient.Model;
 
+import android.graphics.Bitmap;
+
 import com.android.mattia.flickclient.MVC;
 import com.android.mattia.flickclient.View.View;
 
@@ -8,7 +10,7 @@ import net.jcip.annotations.Immutable;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.LinkedList;
-
+import java.util.concurrent.Future;
 
 
 @ThreadSafe
@@ -22,12 +24,13 @@ public class Model {
     public static class PictureInfo {
         public final String title;
         public final String url;
-        public final String url_s;
+        public final Bitmap bitmap_image;
+        //public Future<Bitmap> bitmap_image;
 
-        public PictureInfo(String title, String url, String url_s) {
+        public PictureInfo(String title, String url, Bitmap bitmap_image) {
             this.title = title;
             this.url = url;
-            this.url_s = url_s;
+            this.bitmap_image = bitmap_image;
         }
 
         @Override

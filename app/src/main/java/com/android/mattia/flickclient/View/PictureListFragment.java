@@ -21,6 +21,8 @@ import com.android.mattia.flickclient.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by mattia on 17/05/17.
@@ -40,6 +42,7 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
     public void onModelChanged() {
         setListAdapter(new PictureListAdapter());
     }
+
     private class PictureListAdapter extends ArrayAdapter<Model.PictureInfo> {
         private final Model.PictureInfo[] pictureInfos = mvc.model.getPictureInfos();
 
@@ -58,22 +61,7 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
 
             Model.PictureInfo pictureInfo = pictureInfos[position];
             ((TextView) row.findViewById(R.id.picture_infos)).setText(pictureInfo.toString());
-
-            String imageURL = pictureInfo.url_s;
-
-            Bitmap bitmap = null;
-            // Download Image from URL
-            InputStream input = null;
-            try {
-                input = new java.net.URL(imageURL).openStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // Decode Bitmap
-            bitmap = BitmapFactory.decodeStream(input);
-
-
-            ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(bitmap);
+            ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(pictureInfo.bitmap_image);
 
             return row;
         }
