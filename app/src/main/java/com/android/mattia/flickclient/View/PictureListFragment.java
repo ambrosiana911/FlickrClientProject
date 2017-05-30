@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -34,9 +35,12 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
 
     @Override @UiThread
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
         mvc = ((FlickrClientApplication) getActivity().getApplication()).getMVC();
+        super.onActivityCreated(savedInstanceState);
+
         onModelChanged();
+
+
     }
 
     @Override @UiThread
@@ -48,6 +52,7 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
         private final Model.PictureInfo[] pictureInfos = mvc.model.getPictureInfos();
 
         private PictureListAdapter() {
+
             super(getActivity(), R.layout.list_item_layout, mvc.model.getPictureInfos());
         }
 
@@ -62,13 +67,9 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
 
             Model.PictureInfo pictureInfo = pictureInfos[position];
             ((TextView) row.findViewById(R.id.picture_infos)).setText(pictureInfo.toString());
-            try {
-                ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(pictureInfo.bitmap_image.get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
+            ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(pictureInfo.bitmap_image);
+
+
 
             return row;
         }

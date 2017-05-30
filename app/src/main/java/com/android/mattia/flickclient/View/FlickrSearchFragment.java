@@ -35,7 +35,10 @@ public class FlickrSearchFragment extends Fragment implements AbstractFragment{
 
         insertString = (EditText) view.findViewById(R.id.insert_string);
         send = (Button) view.findViewById(R.id.send_button);
-        send.setOnClickListener(__ -> { mvc.controller.fetchPictureInfos(getActivity(), insertString.getText().toString());                                        mvc.controller.showPictureList();
+        send.setOnClickListener(__ -> { mvc.controller.fetchPictureInfos(getActivity(), insertString.getText().toString());
+                                        mvc.controller.showPictureList();
+                                        mvc.controller.downloadImage(getActivity());
+
                                     }
                                 );
 

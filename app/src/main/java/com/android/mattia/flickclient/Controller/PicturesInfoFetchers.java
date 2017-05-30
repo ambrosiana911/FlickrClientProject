@@ -86,8 +86,6 @@ public class PicturesInfoFetchers extends IntentService {
 
     private Iterable<Model.PictureInfo> parse(String xml) {
         List<Model.PictureInfo> infos = new LinkedList<>();
-        ExecutorService executor = Executors.newCachedThreadPool();
-        CompletionService<Bitmap> complService = new ExecutorCompletionService<>(executor);
 
         int nextPhoto = -1;
         do {
@@ -101,7 +99,7 @@ public class PicturesInfoFetchers extends IntentService {
                 String url_z = xml.substring(url_zPos, xml.indexOf("\"", url_zPos + 1));
                 String url_s = xml.substring(url_sPos, xml.indexOf("\"", url_sPos + 1));
 
-                infos.add(new Model.PictureInfo(title, url_z, complService.submit(() -> new DownloadImage(url_s).getBitmapImage())));
+                infos.add(new Model.PictureInfo(title, url_z,url_s));
             }
         }
         while (nextPhoto != -1);

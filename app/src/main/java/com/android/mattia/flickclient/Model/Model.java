@@ -20,19 +20,25 @@ public class Model {
     @GuardedBy("itself")
     private final LinkedList<PictureInfo> pictureInfos = new LinkedList<>();
 
+    private final LinkedList<Bitmap> pictureImages = new LinkedList<>();
+
     @Immutable
     public static class PictureInfo {
         public final String title;
         public final String url;
         //public final Bitmap bitmap_image;
-        public Future<Bitmap> bitmap_image;
+        public  Bitmap bitmap_image;
+        public final String url_s;
 
-        public PictureInfo(String title, String url, Future<Bitmap> bitmap_image) {
+        public PictureInfo(String title, String url, String url_s) {
             this.title = title;
             this.url = url;
-            this.bitmap_image = bitmap_image;
+            this.url_s=url_s;
         }
 
+        public void setImage(Bitmap bitmap_image) {
+            this.bitmap_image=bitmap_image;
+        }
         @Override
         public String toString() {
             return title + "\n" + url;
@@ -51,6 +57,14 @@ public class Model {
         }
 
         mvc.forEachView(View::onModelChanged);
+    }
+
+    public void setImage(Bitmap bitmap_image, int pos){
+        synchronized (this.pictureInfos) {
+            pictureInfos.get(pos).setImage(bitmap_image);
+        }
+        mvc.forEachView(View::onModelChanged);
+
     }
 
     public PictureInfo[] getPictureInfos() {
