@@ -2,13 +2,10 @@ package com.android.mattia.flickclient.Controller;
 
 import android.content.Context;
 import android.support.annotation.UiThread;
+import android.util.Log;
 
 import com.android.mattia.flickclient.MVC;
-import com.android.mattia.flickclient.Model.Model;
 import com.android.mattia.flickclient.View.View;
-
-import java.util.LinkedList;
-import java.util.List;
 
 
 public class Controller {
@@ -20,17 +17,21 @@ public class Controller {
     }
 
     @UiThread
-    public void fetchPictureInfos(Context context , String searchString) {
+    public void fetchPictureInfos(Context context , String searchString){
+
         PicturesInfoFetchers.fetcher(context , searchString);
+
     }
 
     @UiThread
-    public void downloadImage(Context context ){
-        LinkedList<String> urls = new LinkedList<>();
-        for(Model.PictureInfo picture: mvc.model.getPictureInfos())
-            urls.add(picture.url_s);
-        DownloadImageService.download(context,urls);
-
+    public void downloadImage(Context context, int position, String url_s ){
+        Log.d(TAG, "starting download " + position);
+        DownloadSmallImageService.download(context,position,url_s);
+    }
+    @UiThread
+    public void downloadImageHD(Context context, String url ){
+        Log.d(TAG, "starting download HD");
+        DownloadHDImageService.download(context,url);
     }
 
     @UiThread

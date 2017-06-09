@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
 
         <service android:name=".Controller.PicturesInfoFetchers"/>
-        <service android:name=".Controller.DownloadImageService"/>
+        <service android:name=".Controller.DownloadSmallImageService"/>
         <activity android:name=".View.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
