@@ -75,10 +75,7 @@ public class PictureListFragment extends ListFragment implements AbstractFragmen
             }
 
             Model.PictureInfo pictureInfo = pictureInfos[position];
-            if (position==0)
-                for(int i=0; i<50; i++){
-                    mvc.controller.downloadImage(getActivity(),i, pictureInfos[i].url_s);
-                }
+            mvc.controller.downloadImage(getActivity(),position, pictureInfo.url_s);
             ((TextView) row.findViewById(R.id.picture_infos)).setText(pictureInfo.toString());
 
             ((ImageView) row.findViewById(R.id.preview)).setImageBitmap(pictureInfo.bitmap_image);
